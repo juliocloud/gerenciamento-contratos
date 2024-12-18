@@ -1,6 +1,7 @@
 package ai.attus.gerenciamento_contratos.services;
 
 import ai.attus.gerenciamento_contratos.controllers.common.FieldError;
+import ai.attus.gerenciamento_contratos.enums.ContractStatus;
 import ai.attus.gerenciamento_contratos.exceptions.DuplicateFieldValueException;
 import ai.attus.gerenciamento_contratos.models.Contract;
 import ai.attus.gerenciamento_contratos.repository.ContractRepository;
@@ -8,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ContractService {
@@ -26,6 +28,34 @@ public class ContractService {
             throw new DuplicateFieldValueException("Duplicate contract number", fieldError);
         }
         return contractRepository.save(contract);
+    }
+
+    @Transactional
+    public Contract updateContract(String contractNumber, Contract updatedContract) {
+        Contract existingContract = contractRepository.findById(contractNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Contract with number " + contractNumber + " not found"));
+
+        if (updatedContract.getDescription() != null) {
+            existingContract.setDescription(updatedContract.getDescription());
+        }
+
+        return contractRepository.save(existingContract);
+    }
+
+    @Transactional
+    public Contract archiveContract(String contractNumber) {
+        Contract existingContract = contractRepository.findById(contractNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Contract with number " + contractNumber + " not found"));
+
+        existingContract.setStatus(ContractStatus.SUSPENDED);
+
+        return contractRepository.save(existingContract);
+    }
+
+
+    @Transactional
+    public List<Contract> searchByStatus(ContractStatus status) {
+        return contractRepository.findByStatus(status);
     }
 
     public void fillAutomaticFields(Contract contract){
