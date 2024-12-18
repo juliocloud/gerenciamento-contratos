@@ -38,7 +38,7 @@ CREATE TABLE contracts (
         contract_number VARCHAR(50) UNIQUE NOT NULL PRIMARY KEY,
         creation_date TIMESTAMP NOT NULL,
         description TEXT NOT NULL,
-        status VARCHAR(20) NOT NULL
+        status VARCHAR(20)
         );
 
         CREATE TABLE parties (
