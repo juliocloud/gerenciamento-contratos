@@ -26,3 +26,38 @@ mvn clean verify sonar:sonar
   -Dsonar.token=seu_token_gerado_no_sonar
 ```
 
+## PostgreSQL
+### Configuração
+Foi utilizada a imagem Docker do postgres para utilização de banco de dados. Para subir a imagem docker do Postgres, é necessário utilizar o seguinte comando:
+```
+   docker run --name gerenciamento-contratos -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=attus postgres:16.3
+```
+Para a criação de tabelas é necessário acessar a instância docker com o comando `docker exec -it gerenciamento-contratos psql -U postgres -d attus`. Foi utilizado o seguinte esquema de tabelas:
+```
+CREATE TABLE contracts (
+        contract_number VARCHAR(50) UNIQUE NOT NULL PRIMARY KEY,
+        creation_date TIMESTAMP NOT NULL,
+        description TEXT NOT NULL,
+        status VARCHAR(20) NOT NULL
+        );
+
+        CREATE TABLE parties (
+        id SERIAL PRIMARY KEY,
+        contract_id VARCHAR(50) REFERENCES contracts(contract_number),
+        full_name VARCHAR(100) NOT NULL,
+        document VARCHAR(20) NOT NULL,
+        type VARCHAR(20) NOT NULL,
+        email VARCHAR(100),
+        phone VARCHAR(20)
+        );
+
+        CREATE TABLE events (
+        id SERIAL PRIMARY KEY,
+        contract_id VARCHAR(50) REFERENCES contracts(contract_number),
+        event_type VARCHAR(20) NOT NULL,
+        event_date TIMESTAMP NOT NULL,
+        description TEXT
+        );
+
+```
+
