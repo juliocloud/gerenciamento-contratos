@@ -2,8 +2,6 @@ package ai.attus.gerenciamento_contratos.models;
 
 import ai.attus.gerenciamento_contratos.enums.IdentificationType;
 import ai.attus.gerenciamento_contratos.enums.PartyType;
-import jakarta.persistence.*;
-import lombok.Data;
 
 //@Entity
 public class Party {

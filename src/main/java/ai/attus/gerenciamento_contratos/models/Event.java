@@ -1,8 +1,6 @@
 package ai.attus.gerenciamento_contratos.models;
 
 import ai.attus.gerenciamento_contratos.enums.EventType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 

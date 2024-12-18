@@ -2,14 +2,12 @@ package ai.attus.gerenciamento_contratos.services;
 
 import ai.attus.gerenciamento_contratos.enums.ContractStatus;
 import ai.attus.gerenciamento_contratos.exceptions.DuplicateFieldValueException;
-import ai.attus.gerenciamento_contratos.models.Contact;
 import ai.attus.gerenciamento_contratos.models.Contract;
 import ai.attus.gerenciamento_contratos.models.Party;
 import ai.attus.gerenciamento_contratos.repository.ContractRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
