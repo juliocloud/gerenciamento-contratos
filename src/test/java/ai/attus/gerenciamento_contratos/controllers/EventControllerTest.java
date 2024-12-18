@@ -2,9 +2,7 @@ package ai.attus.gerenciamento_contratos.controllers;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-@WebMvcTest
 public class EventControllerTest {
     @Test
     @DisplayName("Should register event via API successfully")

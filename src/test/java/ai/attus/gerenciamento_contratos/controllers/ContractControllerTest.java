@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-@WebMvcTest
+@WebMvcTest(ContractControllerTest.class)
 public class ContractControllerTest {
     @Test
     @DisplayName("Should create contract via API successfully")

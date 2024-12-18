@@ -1,28 +1,61 @@
 package ai.attus.gerenciamento_contratos.services;
 
+import ai.attus.gerenciamento_contratos.enums.ContractStatus;
+import ai.attus.gerenciamento_contratos.exceptions.DuplicateFieldValueException;
+import ai.attus.gerenciamento_contratos.models.Contract;
+import ai.attus.gerenciamento_contratos.models.Party;
+import ai.attus.gerenciamento_contratos.repository.ContractRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @Service
+@SpringBootTest
 public class ContractServiceTest {
+
+    @Autowired
+    private ContractService contractService;
+
+    @MockitoBean
+    private ContractRepository contractRepository;
+
+    private Contract testContract;
+
+    private Party testParty;
+
     @BeforeEach
     void setUp() {
-        // Instantiate a new Contract
-        // Instantiate a new Party
-        // Instantiate a new Contact
-        // Set properties
+        testContract = new Contract();
+        testContract.setNumber("CONT-001");
+        testContract.setDescription("Contrato de Teste");
+        testContract.setCreationDate(LocalDateTime.now());
+        testContract.setStatus(ContractStatus.ACTIVE);
     }
+
 
     @Test
     @DisplayName("Should create contract successfully")
-    void shouldCreateAContract() {
-        // Test creating a contract successfully
-        // Mock repository behavior
-        // Call service method
-        // Assert results
-        // Verify repository interactions
+    void shouldCreateAContractSuccessfully() {
+        when(contractRepository.existsById(anyString())).thenReturn(false);
+        when(contractRepository.save(any(Contract.class))).thenReturn(testContract);
+
+        Contract resultado = contractService.createContract(testContract);
+
+        assertNotNull(resultado);
+        assertEquals(testContract.getNumber(), resultado.getNumber());
+        verify(contractRepository).save(testContract);
     }
 
     @Test
@@ -98,9 +131,11 @@ public class ContractServiceTest {
     @Test
     @DisplayName("Should throw exception when creating contract with duplicate number")
     void shouldThrowExceptionWhenCreatingContractWithDuplicateNumber() {
-        // Test throwing exception when creating a contract with a duplicate number
-        // Mock repository behavior
-        // Call service method and expect exception
+        when(contractRepository.existsById(anyString())).thenReturn(true);
+
+        assertThrows(DuplicateFieldValueException.class, () -> {
+            contractService.createContract(testContract);
+        });
     }
 
     @Test
