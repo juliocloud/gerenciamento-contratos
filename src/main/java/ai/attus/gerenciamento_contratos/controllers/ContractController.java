@@ -2,6 +2,7 @@ package ai.attus.gerenciamento_contratos.controllers;
 
 import ai.attus.gerenciamento_contratos.models.Contract;
 import ai.attus.gerenciamento_contratos.services.ContractService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,8 @@ public class ContractController {
     }
 
     @PostMapping
-    public ResponseEntity<Contract> searchContract(@RequestBody Contract contract){
-        System.out.println(contract);
-        return ResponseEntity.ok(contractService.createContract(contract));
+    public ResponseEntity<Contract> createContract(@RequestBody @Valid Contract contract) {
+        var created = contractService.createContract(contract);
+        return ResponseEntity.ok(created);
     }
 }
