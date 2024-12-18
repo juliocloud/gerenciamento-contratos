@@ -66,6 +66,36 @@ public class ContractServiceTest {
     }
 
     @Test
+    @DisplayName("Should search a contract by status successfully")
+    void shouldSearchContractByStatusSuccessfully() {
+        // Test if it can search contract by status successfully
+        // Mock repository behavior
+        // Call service method
+        // Assert results
+        // Verify repository interactions
+    }
+
+    @Test
+    @DisplayName("Should search a contract by creation date successfully")
+    void shouldSearchContractByCreationDateSuccessfully() {
+        // Test if it can search contract by creation date successfully
+        // Mock repository behavior
+        // Call service method
+        // Assert results
+        // Verify repository interactions
+    }
+
+    @Test
+    @DisplayName("Should search a contract by identification successfully")
+    void shouldSearchContractByIdentificationSuccessfully() {
+        // Test if it can search contract by identification successfully
+        // Mock repository behavior
+        // Call service method
+        // Assert results
+        // Verify repository interactions
+    }
+
+    @Test
     @DisplayName("Should throw exception when creating contract with duplicate number")
     void shouldThrowExceptionWhenCreatingContractWithDuplicateNumber() {
         // Test throwing exception when creating a contract with a duplicate number
@@ -77,6 +107,14 @@ public class ContractServiceTest {
     @DisplayName("Should throw exception when trying to modify a not-active contract")
     void shouldThrowExceptionWhenModifyingANonActiveContract() {
         // Test throwing exception when trying to modify an ended contract
+        // Mock repository behavior
+        // Call service method and expect exception
+    }
+
+    @Test
+    @DisplayName("Should throw exception when trying to register an invalid party identification (CPF/CNPJ validation)")
+    void shouldThrowExceptionWhenRegisteringInvalidIdentification() {
+        // Test throwing exception when trying to register an invalid party identification
         // Mock repository behavior
         // Call service method and expect exception
     }
