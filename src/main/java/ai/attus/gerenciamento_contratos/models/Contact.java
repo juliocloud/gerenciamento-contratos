@@ -1,4 +1,4 @@
-package ai.attus.gerenciamento_contratos.model;
+package ai.attus.gerenciamento_contratos.models;
 
 public class Contact {
     private String email;
