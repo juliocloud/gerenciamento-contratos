@@ -26,6 +26,26 @@ public class Event {
         this.contractId = contractId;
     }
 
+    @Id
+    @Column(name = "id", unique = true)
+    @JsonIgnore
+    private String id;
+
+    @Column(name = "event_type")
+    private EventType type;
+
+    @Column(name = "event_date")
+    private LocalDate registrationDate;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "contract_id")
+    private String contractId;
+
+    @Column(name = "party_Id")
+    private String partyId;
+
     public void setId(String id) {
         this.id = id;
     }
@@ -50,23 +70,6 @@ public class Event {
         this.contractId = contractId;
     }
 
-    @Id
-    @Column(name = "id", unique = true)
-    @JsonIgnore
-    private String id;
-
-    @Column(name = "event_type")
-    private EventType type;
-
-    @Column(name = "event_date")
-    private LocalDate registrationDate;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "contract_id")
-    private String contractId;
-
     public String getPartyId() {
         return partyId;
     }
@@ -75,7 +78,5 @@ public class Event {
         this.partyId = partyId;
     }
 
-    @Column(name = "party_Id")
-    private String partyId;
 
 }

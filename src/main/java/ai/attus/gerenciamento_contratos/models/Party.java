@@ -52,7 +52,6 @@ public class Party {
 
     private PartyType type;
 
-
     public String getId() {
         return id;
     }
@@ -60,7 +59,6 @@ public class Party {
     public void setId(String id) {
         this.id = id;
     }
-
 
     public void setFullName(String fullName) {
         this.fullName = fullName;

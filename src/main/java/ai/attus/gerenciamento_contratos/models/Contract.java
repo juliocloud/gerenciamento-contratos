@@ -19,19 +19,6 @@ public class Contract {
 
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStatus(ContractStatus status) {
-        this.status = status;
-    }
-
-
     @JsonCreator
     public Contract(
             @JsonProperty("number") String number,
@@ -44,9 +31,6 @@ public class Contract {
         this.status = status;
     }
 
-    public void setParties(List<Party> parties) {
-        this.parties = parties;
-    }
 
     public Contract(
             LocalDate creationDate,
@@ -72,6 +56,9 @@ public class Contract {
     @Enumerated(EnumType.STRING)
     private ContractStatus status;
 
+    @Version
+    @JsonIgnore
+    private int version;
     public String getNumber() {
         return number;
     }
@@ -79,7 +66,6 @@ public class Contract {
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
-
 
     public ContractStatus getStatus() {
         return status;
@@ -93,13 +79,16 @@ public class Contract {
         return creationDate;
     }
 
-    @Version
-    @JsonIgnore
-    private int version;
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Party> parties;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Event> events;
+    public void setStatus(ContractStatus status) {
+        this.status = status;
+    }
+
 }
