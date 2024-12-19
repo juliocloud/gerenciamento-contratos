@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +40,7 @@ public class ContractServiceTest {
     void setUp() {
         testContract = new Contract();
         testContract.setNumber("CONT-001");
-        testContract.setDescription("Contrato de Teste");
+        testContract.setDescription("Contract de Teste");
         testContract.setCreationDate(LocalDateTime.now());
         testContract.setStatus(ContractStatus.ACTIVE);
     }
@@ -81,11 +82,32 @@ public class ContractServiceTest {
     @Test
     @DisplayName("Should update contract status successfully")
     void shouldUpdateContractStatusSuccessfully() {
-        // Test updating the status of a contract successfully
-        // Mock repository behavior
-        // Call service method
-        // Assert results
-        // Verify repository interactions
+        when(contractRepository.findById(anyString())).thenReturn(Optional.of(testContract));
+        when(contractRepository.save(any(Contract.class))).thenReturn(testContract);
+
+        Contract edited = new Contract();
+        edited.setNumber("CONT-001");
+        edited.setDescription("This description is now edited");
+        edited.setCreationDate(LocalDateTime.now());
+        edited.setStatus(ContractStatus.ACTIVE);
+
+        contractService.updateContract("CONT-001", edited);
+
+        assertEquals(edited.getDescription(), testContract.getDescription());
+        verify(contractRepository).save(testContract);
+
+    }
+
+    @Test
+    @DisplayName("Should archive a contract successfully")
+    void shoudArchiveContractSuccessfully() {
+        when(contractRepository.findById(anyString())).thenReturn(Optional.of(testContract));
+        when(contractRepository.save(any(Contract.class))).thenReturn(testContract);
+
+        contractService.archiveContract("CONT-001");
+
+        assertEquals(testContract.getStatus(), ContractStatus.SUSPENDED);
+        verify(contractRepository).save(testContract);
     }
 
     @Test
