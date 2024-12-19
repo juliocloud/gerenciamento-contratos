@@ -45,7 +45,6 @@ class ContractServiceTest {
 
 
     @Test
-    @DisplayName("Should create contract successfully")
     void shouldCreateAContractSuccessfully() {
         when(contractRepository.existsById(anyString())).thenReturn(false);
         when(contractRepository.save(any(Contract.class))).thenReturn(testContract);
@@ -59,7 +58,6 @@ class ContractServiceTest {
 
 
     @Test
-    @DisplayName("Should update contract status successfully")
     void shouldUpdateContractStatusSuccessfully() {
         when(contractRepository.findById(anyString())).thenReturn(Optional.of(testContract));
         when(contractRepository.save(any(Contract.class))).thenReturn(testContract);
@@ -78,7 +76,6 @@ class ContractServiceTest {
     }
 
     @Test
-    @DisplayName("Should archive a contract successfully")
     void shoudArchiveContractSuccessfully() {
         when(contractRepository.findById(anyString())).thenReturn(Optional.of(testContract));
         when(contractRepository.save(any(Contract.class))).thenReturn(testContract);
@@ -91,7 +88,6 @@ class ContractServiceTest {
 
 
     @Test
-    @DisplayName("Should search a contract by status successfully")
     void shouldSearchContractByStatusSuccessfully() {
         when(contractRepository.findByStatus(ContractStatus.ACTIVE))
                 .thenReturn(List.of(testContract));
@@ -105,7 +101,6 @@ class ContractServiceTest {
     }
 
     @Test
-    @DisplayName("Should search contracts by creation date successfully")
     void shouldSearchContractByCreationDateSuccessfully() {
         when(contractRepository.findByCreationDate(testContract.getCreationDate()))
                 .thenReturn(List.of(testContract));
@@ -120,7 +115,6 @@ class ContractServiceTest {
 
 
     @Test
-    @DisplayName("Should search a contract by identification successfully")
     void shouldSearchContractByIdentificationSuccessfully() {
         when(contractRepository.findById("CONT-001"))
                 .thenReturn(Optional.of(testContract));
@@ -133,7 +127,6 @@ class ContractServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw exception when creating contract with duplicate number")
     void shouldThrowExceptionWhenCreatingContractWithDuplicateNumber() {
         when(contractRepository.existsById(anyString())).thenReturn(true);
 

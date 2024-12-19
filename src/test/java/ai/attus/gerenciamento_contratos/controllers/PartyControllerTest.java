@@ -32,24 +32,20 @@ class PartyControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Initialize MockMvc and ObjectMapper
         objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(partyController).build();
     }
 
 
     @Test
-    void testRegisterParty_Success() throws Exception {
-        // Given: Creating a valid Party object with all required fields
+    void shouldRegisterPartySuccessfully() throws Exception {
         Party party = new Party();
-        party.setId("1"); // Providing required fields
+        party.setId("1");
         party.setContractId("12345");
         party.setFullName("Test Party");
 
-        // Mock service response
         when(partyService.registerParty(any(Party.class))).thenReturn(party);
 
-        // When & Then
         mockMvc.perform(post("/api/parties")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(party)))
@@ -58,22 +54,18 @@ class PartyControllerTest {
                 .andExpect(jsonPath("$.contractId").value("12345"))
                 .andExpect(jsonPath("$.id").value("1"));
 
-        // Verify service method was called
         verify(partyService, times(1)).registerParty(any(Party.class));
     }
 
     @Test
-    void testRegisterParty_Failure_InvalidInput() throws Exception {
-        // Given an invalid Party object (e.g., missing required fields)
-        Party party = new Party(); // assuming fields are required and empty
+    void shouldFailOnRegisterPartyInvalidInput() throws Exception {
+        Party party = new Party();
 
-        // When & Then
         mockMvc.perform(post("/api/parties")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(party)))
                 .andExpect(status().isBadRequest()); // Expecting 400 for invalid input
 
-        // Verify service method was not called
         verify(partyService, times(0)).registerParty(any(Party.class));
     }
 

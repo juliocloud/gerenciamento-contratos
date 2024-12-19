@@ -71,7 +71,6 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Should register event successfully")
     void shouldRegisterEventSuccessfully() {
         testContract.setStatus(null);
 
@@ -95,7 +94,6 @@ class EventServiceTest {
 
 
     @Test
-    @DisplayName("Should throw InvalidContractStatusException for invalid status")
     void shouldThrowInvalidContractStatusExceptionForInvalidStatus() {
         testContract.setStatus(null);
 
@@ -115,13 +113,11 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw InvalidContractStatusException for sign events")
     void shouldThrowInvalidContractStatusExceptionForSignEvents() {
         shouldThrowInvalidContractStatusException(ContractStatus.SUSPENDED, EventType.SIGNATURE);
     }
 
     @Test
-    @DisplayName("Should throw InvalidContractStatusException for invalid status")
     void shouldThrowInvalidContractStatusExceptionForTermination() {
         shouldThrowInvalidContractStatusException(null, EventType.TERMINATION); // Here, setting status to null
     }
@@ -139,14 +135,12 @@ class EventServiceTest {
         when(partyService.getById(testParty.getId())).thenReturn(Optional.of(testParty));
         when(partyService.getPartiesAssociatedWithContract(testContract.getNumber())).thenReturn(Collections.singletonList(testParty));
 
-        // Assert that InvalidContractStatusException is thrown
         assertThrows(InvalidContractStatusException.class, () -> {
             eventService.registerEvent(testEvent);
         });
     }
 
     @Test
-    @DisplayName("Should throw InvalidPartySignatureException when invalid party signature is used")
     void shouldThrowInvalidPartySignatureExceptionWhenInvalidParty() {
         when(partyService.getById(testEvent.getPartyId())).thenReturn(Optional.of(testParty));
         when(partyService.getPartiesAssociatedWithContract(testEvent.getContractId())).thenReturn(Collections.emptyList());
@@ -155,7 +149,6 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw ReferencedObjectDoesntExistException when party doesn't exist")
     void shouldThrowReferencedObjectDoesntExistExceptionWhenPartyDoesNotExist() {
         when(partyService.getById(testEvent.getPartyId())).thenReturn(Optional.empty());
 
@@ -163,32 +156,26 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Should handle post event registration for activation events")
     void shouldHandlePostEventRegisteredForActivationEvents() {
         shouldHandlePostEventRegistered(EventType.SIGNATURE, ContractStatus.ACTIVE);
     }
 
     @Test
-    @DisplayName("Should handle post event registration for termination events")
     void shouldHandlePostEventRegisteredForTerminationEvents() {
         shouldHandlePostEventRegistered(EventType.TERMINATION, ContractStatus.FINISHED);
     }
 
     private void shouldHandlePostEventRegistered(EventType eventType, ContractStatus expectedStatus) {
-        // Set up the event with the appropriate type
         testEvent.setType(eventType);
 
         List<Event> modifiableEvents = new ArrayList<>();
         modifiableEvents.add(testEvent);
 
-        // Mock interactions
         when(eventRepository.findByContractId(testEvent.getContractId())).thenReturn(modifiableEvents);
         when(partyService.getPartiesAssociatedWithContract(testEvent.getContractId())).thenReturn(Collections.singletonList(testParty));
 
-        // Call the method to handle post event registration
         eventService.handlePostEventRegistered(testEvent);
 
-        // Verify the contract sealing
         verify(contractService).seal(expectedStatus, testEvent.getContractId());
     }
 

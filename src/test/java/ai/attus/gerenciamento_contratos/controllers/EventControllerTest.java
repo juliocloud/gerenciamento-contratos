@@ -39,7 +39,7 @@ class EventControllerTest {
     }
 
     @Test
-    void testRegisterEvent() throws Exception {
+    void shouldRegisterNewEvent() throws Exception {
         Event event = new Event(
                 "sample-id",
                 EventType.SIGNATURE,

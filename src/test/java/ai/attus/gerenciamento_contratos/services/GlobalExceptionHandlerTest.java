@@ -16,26 +16,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GlobalExceptionHandlerTest {
 
     @Test
-    void testHandleInvalidContractStatus() {
-        // Arrange
+    void shouldHandleInvalidContractStatus() {
         MakeFieldError fieldError = new MakeFieldError("contractStatus", "Contract status is invalid.");
         InvalidContractStatusException exception = new InvalidContractStatusException(fieldError);
 
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
-        // Act
         ResponseError result = handler.handleInvalidContractStatus(exception);
 
-        // Assert
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.status());
         assertEquals("Invalid value", result.message());
         assertEquals(1, result.errors().size());
-        assertEquals(fieldError, result.errors().get(0));  // Verifying fieldError is included in errors list
+        assertEquals(fieldError, result.errors().get(0));
     }
 
     @Test
-    void testHandleReferencedNonExistingObject() {
-        // Arrange
+    void shouldHandleReferencedNonExistingObject() {
         MakeFieldError fieldError = new MakeFieldError("referencedObject", "Referenced object does not exist.");
         ReferencedObjectDoesntExistException exception = new ReferencedObjectDoesntExistException(fieldError);
 
@@ -46,21 +42,18 @@ class GlobalExceptionHandlerTest {
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), result.status());
         assertEquals("Referencing non existing object", result.message());
         assertEquals(1, result.errors().size());
-        assertEquals(fieldError, result.errors().get(0));  // Verifying fieldError is included in errors list
+        assertEquals(fieldError, result.errors().get(0));
     }
 
     @Test
-    void testHandleInvalidPartySignature() {
-        // Arrange
+    void shouldHandleInvalidPartySignature() {
         MakeFieldError fieldError = new MakeFieldError("partySignature", "Party signature is invalid.");
         InvalidPartySignatureException exception = new InvalidPartySignatureException(fieldError);
 
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
-        // Act
         ResponseError result = handler.handleInvalidPartySignature(exception);
 
-        // Assert
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.value(), result.status());
         assertEquals("Invalid party signature", result.message());
         assertEquals(1, result.errors().size());

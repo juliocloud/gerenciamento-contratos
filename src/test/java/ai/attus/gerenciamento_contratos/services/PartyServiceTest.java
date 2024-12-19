@@ -42,7 +42,7 @@ class PartyServiceTest {
     }
 
     @Test
-    void testRegisterParty_ThrowsDuplicatePartyNumber() {
+    void shouldThrowDuplicatePartyNumber() {
         when(partyRepository.existsById(party.getId())).thenReturn(true);
 
         MakeFieldError expectedError = new MakeFieldError("id", "Duplicate party number");
@@ -56,7 +56,7 @@ class PartyServiceTest {
     }
 
     @Test
-    void testRegisterParty_ThrowsContractDoesNotExist() {
+    void shouldThrowContractDoesntExist() {
         when(partyRepository.existsById(party.getId())).thenReturn(false);
         when(contractService.existsById(party.getContractId())).thenReturn(false);
 
@@ -71,7 +71,7 @@ class PartyServiceTest {
     }
 
     @Test
-    void testRegisterParty_Success() {
+    void shouldRegisterPartySuccessfully() {
         when(partyRepository.existsById(party.getId())).thenReturn(false);
         when(contractService.existsById(party.getContractId())).thenReturn(true);
         when(partyRepository.save(any(Party.class))).thenReturn(party);
@@ -86,7 +86,7 @@ class PartyServiceTest {
     }
 
     @Test
-    void testGetPartiesAssociatedWithContract() {
+    void shouldGetPartiesAssociatedWithContract() {
         String contractNumber = "C-001";
         when(partyRepository.findByContractNumber(contractNumber)).thenReturn(List.of(party));
 
@@ -98,7 +98,7 @@ class PartyServiceTest {
     }
 
     @Test
-    void testGetById() {
+    void shouldGetById() {
         when(partyRepository.findById("123")).thenReturn(Optional.of(party));
 
         Optional<Party> result = partyService.getById("123");
@@ -108,7 +108,7 @@ class PartyServiceTest {
     }
 
     @Test
-    void testGetById_NotFound() {
+    void shouldAssertIdNotFound() {
         when(partyRepository.findById("123")).thenReturn(Optional.empty());
 
         Optional<Party> result = partyService.getById("123");

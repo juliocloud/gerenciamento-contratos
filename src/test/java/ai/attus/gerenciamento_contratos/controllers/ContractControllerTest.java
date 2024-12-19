@@ -139,7 +139,7 @@ class ContractControllerTest {
     }
 
     @Test
-    void testSearchByIdentification() throws Exception {
+    void shouldSearchByIdentification() throws Exception {
         Party party = new Party(
                 "sample-id",
                 "12345678900",
@@ -149,19 +149,22 @@ class ContractControllerTest {
                 "joao@attus.ai",
                 "123456789"
         );
+        party.setContractId("sample-contract-id");
 
         Contract contract = new Contract(
                 LocalDate.now(),
                 "Sample Description",
                 ContractStatus.ACTIVE
         );
-        contract.setParties(Arrays.asList(party));
+        contract.setNumber("sample-contract-id");
 
         when(contractService.searchByIdentification("12345678900")).thenReturn(Arrays.asList(contract));
+
 
         mockMvc.perform(get("/api/contracts/find/partyId/12345678900"))
                 .andExpect(status().isOk());
 
         verify(contractService).searchByIdentification("12345678900");
     }
+
 }
