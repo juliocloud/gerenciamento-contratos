@@ -13,19 +13,6 @@ import lombok.Data;
 @Entity
 @Table(name = "parties")
 public class Party {
-    @Override
-    public String toString() {
-        return "Party{" +
-                "id='" + id + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", identification='" + identification + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", contractId='" + contractId + '\'' +
-                ", identificationType=" + identificationType +
-                ", type=" + type +
-                '}';
-    }
 
     public Party(String id, String identification, String fullName, IdentificationType identificationType, PartyType type, String email, String phone) {
         this.id = id;
@@ -74,36 +61,9 @@ public class Party {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public String getIdentification() {
-        return identification;
-    }
-
-    public void setIdentification(String identification) {
-        this.identification = identification;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getContractId() {
@@ -114,19 +74,4 @@ public class Party {
         this.contractId = contractId;
     }
 
-    public IdentificationType getIdentificationType() {
-        return identificationType;
-    }
-
-    public void setIdentificationType(IdentificationType identificationType) {
-        this.identificationType = identificationType;
-    }
-
-    public PartyType getType() {
-        return type;
-    }
-
-    public void setType(PartyType type) {
-        this.type = type;
-    }
 }

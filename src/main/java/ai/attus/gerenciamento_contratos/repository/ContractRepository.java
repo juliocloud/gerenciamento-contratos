@@ -15,7 +15,7 @@ public interface ContractRepository extends JpaRepository<Contract, String> {
     List<Contract> findByStatus(ContractStatus status);
 
     @Query("SELECT c FROM Contract c WHERE c.creationDate = :date ")
-    List<Contract> findByCreationDateRange(LocalDate date);
+    List<Contract> findByCreationDate(LocalDate date);
 
     @Query("SELECT c FROM Contract c WHERE c.number IN (SELECT p.contractId FROM Party p WHERE p.id = :identification)")
     List<Contract> findByIdentification(String identification);
