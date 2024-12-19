@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 @Service
 @SpringBootTest
-public class ContractServiceTest {
+class ContractServiceTest {
 
     @Autowired
     private ContractService contractService;
@@ -106,7 +106,7 @@ public class ContractServiceTest {
 
         contractService.archiveContract("CONT-001");
 
-        assertEquals(testContract.getStatus(), ContractStatus.SUSPENDED);
+        assertEquals(ContractStatus.SUSPENDED, testContract.getStatus());
         verify(contractRepository).save(testContract);
     }
 

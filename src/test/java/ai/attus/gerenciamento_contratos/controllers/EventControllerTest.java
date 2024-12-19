@@ -3,7 +3,7 @@ package ai.attus.gerenciamento_contratos.controllers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class EventControllerTest {
+class EventControllerTest {
     @Test
     @DisplayName("Should register event via API successfully")
     void shouldRegisterEventViaAPISuccessfully() throws Exception {

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -24,7 +23,7 @@ public class GlobalExceptionHandler {
         List<FieldError> fieldErrors = e.getFieldErrors();
         List<MakeFieldError> listErrors = fieldErrors.stream().map(
                 fieldError -> new MakeFieldError(fieldError.getField(), fieldError.getDefaultMessage())
-        ).collect(Collectors.toList());
+        ).toList();
         return new ResponseError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validation error", listErrors);
     }
 
@@ -32,7 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateFieldValueException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseError handleValidationException(DuplicateFieldValueException ex) {
-        List<MakeFieldError> fieldErrors = new ArrayList<MakeFieldError>();
+        List<MakeFieldError> fieldErrors = new ArrayList<>();
         fieldErrors.add(ex.getField());
         return new ResponseError(HttpStatus.CONFLICT.value(), "Conflict error", fieldErrors);
     }
@@ -40,8 +39,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidContractStatusException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseError hanldeInvalidContractStatus(InvalidContractStatusException ex) {
-        List<MakeFieldError> fieldErrors = new ArrayList<MakeFieldError>();
+    public ResponseError handleInvalidContractStatus(InvalidContractStatusException ex) {
+        List<MakeFieldError> fieldErrors = new ArrayList<>();
         fieldErrors.add(ex.getField());
         return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Invalid value",fieldErrors);
     }
@@ -49,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ReferencedObjectDoesntExistException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseError handleReferencedNonExistingObject(ReferencedObjectDoesntExistException ex) {
-        List<MakeFieldError> fieldErrors = new ArrayList<MakeFieldError>();
+        List<MakeFieldError> fieldErrors = new ArrayList<>();
         fieldErrors.add(ex.getField());
         return new ResponseError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Referencing non existing object",fieldErrors);
     }
@@ -57,9 +56,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidPartySignatureException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseError handleInvalidPartySignature(InvalidPartySignatureException ex) {
-        List<MakeFieldError> fieldErrors = new ArrayList<MakeFieldError>();
+        List<MakeFieldError> fieldErrors = new ArrayList<>();
         fieldErrors.add(ex.getField());
         return new ResponseError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Invalid party signature",fieldErrors);
     }
+
 
 }

@@ -15,14 +15,14 @@ import java.util.Optional;
 @Service
 public class PartyService {
 
-    @Autowired
-    private PartyRepository partyRepository;
+    private final PartyRepository partyRepository;
+
+    private final ContractService contractService;
 
     @Autowired
-    private ContractService contractService;
-
-    public PartyService(PartyRepository partyRepository) {
+    public PartyService(PartyRepository partyRepository, ContractService contractService) {
         this.partyRepository = partyRepository;
+        this.contractService = contractService;
     }
 
     @Transactional

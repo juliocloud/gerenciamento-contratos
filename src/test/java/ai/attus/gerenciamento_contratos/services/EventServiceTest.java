@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class EventServiceTest {
+class EventServiceTest {
     @BeforeEach
     void setUp() {
         // Set up test data for Contract and Event

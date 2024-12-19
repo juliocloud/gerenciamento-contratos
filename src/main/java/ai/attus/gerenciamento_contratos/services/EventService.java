@@ -5,12 +5,12 @@ import ai.attus.gerenciamento_contratos.enums.ContractStatus;
 import ai.attus.gerenciamento_contratos.enums.EventType;
 import ai.attus.gerenciamento_contratos.exceptions.InvalidContractStatusException;
 import ai.attus.gerenciamento_contratos.exceptions.InvalidPartySignatureException;
+import ai.attus.gerenciamento_contratos.exceptions.ReferencedObjectDoesntExistException;
 import ai.attus.gerenciamento_contratos.models.Contract;
 import ai.attus.gerenciamento_contratos.models.Event;
 import ai.attus.gerenciamento_contratos.models.Party;
 import ai.attus.gerenciamento_contratos.repository.ContractRepository;
 import ai.attus.gerenciamento_contratos.repository.EventRepository;
-import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,36 +27,36 @@ public class EventService {
 
     private final ContractRepository contractRepository;
 
-    @Autowired
-    private PartyService partyService;
+    private final PartyService partyService;
+
+    private final ContractService contractService;
+
 
     @Autowired
-    private ContractService contractService;
-
-    public EventService(EventRepository eventRepository, ContractRepository contractRepository) {
+    public EventService(EventRepository eventRepository, ContractRepository contractRepository, PartyService partyService, ContractService contractService) {
         this.eventRepository = eventRepository;
         this.contractRepository = contractRepository;
+        this.partyService = partyService;
+        this.contractService = contractService;
     }
-
 
     @Transactional
     public Event registerEvent(Event event){
-        event = fillEvent(event);
+        fillEvent(event);
         validations(event);
         Event registered = eventRepository.save(event);
         handlePostEventRegistered(event);
         return registered;
     }
 
-    private Event fillEvent(Event event){
+    private void fillEvent(Event event){
         String id = UUID.randomUUID().toString();
         LocalDate currentDate = LocalDate.now();
 
         event.setId(id);
         event.setRegistrationDate(currentDate);
-
-        return event;
     }
+
     private void validateSignatureType(Event event) {
         Contract contract = contractRepository.findById(event.getContractId())
                 .orElseThrow(() -> new IllegalArgumentException("Contract not found for ID: " + event.getContractId()));
@@ -83,12 +83,17 @@ public class EventService {
         }
     }
 
-    public void validatePartySignature(Event event){
+    public void validatePartySignature(Event event) {
         List<Party> associatedParties = partyService.getPartiesAssociatedWithContract(event.getContractId());
 
         Optional<Party> referencedEventParty = partyService.getById(event.getPartyId());
 
-        if(!associatedParties.contains(referencedEventParty.get())){
+        if (referencedEventParty.isEmpty()) {
+            MakeFieldError fieldError = new MakeFieldError("partyId", "Party not found");
+            throw new ReferencedObjectDoesntExistException(fieldError);
+        }
+
+        if (!associatedParties.contains(referencedEventParty.get())) {
             MakeFieldError fieldError = new MakeFieldError("partyId", "Invalid party signature");
             throw new InvalidPartySignatureException(fieldError);
         }
