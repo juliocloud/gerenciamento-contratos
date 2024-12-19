@@ -91,6 +91,7 @@ class EventServiceTest {
     }
 
 
+
     @Test
     @DisplayName("Should throw InvalidContractStatusException for invalid status")
     void shouldThrowInvalidContractStatusExceptionForInvalidStatus() {
@@ -111,6 +112,29 @@ class EventServiceTest {
             eventService.registerEvent(testEvent);
         });
     }
+
+
+    @Test
+    @DisplayName("Should throw InvalidContractStatusException for sign events")
+    void shouldThrowInvalidContractStatusExceptionForSignEvents() {
+        testContract.setStatus(ContractStatus.SUSPENDED);
+
+        Event testEvent = new Event();
+        testEvent.setContractId(testContract.getNumber());
+        testEvent.setType(EventType.SIGNATURE);
+        testEvent.setPartyId(testParty.getId());
+
+        when(contractRepository.findById(testContract.getNumber())).thenReturn(Optional.of(testContract));
+        when(eventRepository.save(any(Event.class))).thenReturn(testEvent);
+
+        when(partyService.getById(testParty.getId())).thenReturn(Optional.of(testParty));
+        when(partyService.getPartiesAssociatedWithContract(testContract.getNumber())).thenReturn(Collections.singletonList(testParty));
+
+        assertThrows(InvalidContractStatusException.class, () -> {
+            eventService.registerEvent(testEvent);
+        });
+    }
+
 
 
     @Test
@@ -153,8 +177,22 @@ class EventServiceTest {
     }
 
     @Test
-    @DisplayName("Should handle post event registration for successful events")
-    void shouldHandlePostEventRegisteredForSuccessfulEvents() {
+    @DisplayName("Should handle post event registration for activation events")
+    void shouldHandlePostEventRegisteredForActivationEvents() {
+        List<Event> modifiableEvents = new ArrayList<>();
+        modifiableEvents.add(testEvent);
+
+        when(eventRepository.findByContractId(testEvent.getContractId())).thenReturn(modifiableEvents);
+        when(partyService.getPartiesAssociatedWithContract(testEvent.getContractId())).thenReturn(Collections.singletonList(testParty));
+
+        eventService.handlePostEventRegistered(testEvent);
+
+        verify(contractService).seal(ContractStatus.ACTIVE, testEvent.getContractId());
+    }
+
+    @Test
+    @DisplayName("Should handle post event registration for termination events")
+    void shouldHandlePostEventRegisteredForTerminationEvents() {
         List<Event> modifiableEvents = new ArrayList<>();
         modifiableEvents.add(testEvent);
 
