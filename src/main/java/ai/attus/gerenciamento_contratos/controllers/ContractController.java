@@ -36,9 +36,9 @@ public class ContractController {
 
     @PutMapping("/{contractNumber}")
     public ResponseEntity<Contract> updateContract(
-            @PathVariable String contractId,
+            @PathVariable String contractNumber,
             @RequestBody @Valid Contract updatedContract) {
-        var updated = contractService.updateContract(contractId, updatedContract);
+        var updated = contractService.updateContract(contractNumber, updatedContract);
         return ResponseEntity.ok(updated);
     }
 
@@ -49,7 +49,7 @@ public class ContractController {
 
     @GetMapping("/find/creationDate/{date}")
     public ResponseEntity<List<Contract>> searchByCreationDateRange(@PathVariable LocalDate date) {
-        return ResponseEntity.ok(contractService.searchByCreationDateRange(date));
+        return ResponseEntity.ok(contractService.searchByCreationDate(date));
     }
 
 

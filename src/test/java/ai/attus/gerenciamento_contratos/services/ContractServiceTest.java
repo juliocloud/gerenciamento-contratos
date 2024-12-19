@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @Service
 @SpringBootTest
-public class ContractServiceTest {
+class ContractServiceTest {
 
     @Autowired
     private ContractService contractService;
@@ -59,25 +60,6 @@ public class ContractServiceTest {
         verify(contractRepository).save(testContract);
     }
 
-    @Test
-    @DisplayName("Should edit contract successfully")
-    void shouldEditContractSuccessfully() {
-        // Test editing a contract successfully
-        // Mock repository behavior
-        // Call service method
-        // Assert results
-        // Verify repository interactions
-    }
-
-    @Test
-    @DisplayName("Should add party to contract successfully")
-    void shouldAddPartyToContractSuccessfully() {
-        // Test adding a party to a contract successfully
-        // Mock repository behavior
-        // Call service method
-        // Verify repository interactions
-        // Assert results
-    }
 
     @Test
     @DisplayName("Should update contract status successfully")
@@ -106,48 +88,51 @@ public class ContractServiceTest {
 
         contractService.archiveContract("CONT-001");
 
-        assertEquals(testContract.getStatus(), ContractStatus.SUSPENDED);
+        assertEquals(ContractStatus.SUSPENDED, testContract.getStatus());
         verify(contractRepository).save(testContract);
     }
 
-    @Test
-    @DisplayName("Should verify if contract events are coherent with the current contract status")
-    void shouldVerifyContractStatusAndEvents() {
-        // Test if the order of events will affect the status
-        // Mock repository behavior
-        // Call service method
-        // Assert results
-        // Verify repository interactions
-    }
 
     @Test
     @DisplayName("Should search a contract by status successfully")
     void shouldSearchContractByStatusSuccessfully() {
-        // Test if it can search contract by status successfully
-        // Mock repository behavior
-        // Call service method
-        // Assert results
-        // Verify repository interactions
+        when(contractRepository.findByStatus(ContractStatus.ACTIVE))
+                .thenReturn(List.of(testContract));
+
+        List<Contract> result = contractService.searchByStatus(ContractStatus.ACTIVE);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(testContract.getNumber(), result.getFirst().getNumber());
+        verify(contractRepository).findByStatus(ContractStatus.ACTIVE);
     }
 
     @Test
-    @DisplayName("Should search a contract by creation date successfully")
+    @DisplayName("Should search contracts by creation date successfully")
     void shouldSearchContractByCreationDateSuccessfully() {
-        // Test if it can search contract by creation date successfully
-        // Mock repository behavior
-        // Call service method
-        // Assert results
-        // Verify repository interactions
+        when(contractRepository.findByCreationDate(testContract.getCreationDate()))
+                .thenReturn(List.of(testContract));
+
+        List<Contract> result = contractService.searchByCreationDate(testContract.getCreationDate());
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(testContract.getNumber(), result.getFirst().getNumber());
+        verify(contractRepository).findByCreationDate(testContract.getCreationDate());
     }
+
 
     @Test
     @DisplayName("Should search a contract by identification successfully")
     void shouldSearchContractByIdentificationSuccessfully() {
-        // Test if it can search contract by identification successfully
-        // Mock repository behavior
-        // Call service method
-        // Assert results
-        // Verify repository interactions
+        when(contractRepository.findById("CONT-001"))
+                .thenReturn(Optional.of(testContract));
+
+        Optional<Contract> result = contractService.findById("CONT-001");
+
+        assertTrue(result.isPresent());
+        assertEquals(testContract.getNumber(), result.get().getNumber());
+        verify(contractRepository).findById("CONT-001");
     }
 
     @Test
@@ -160,19 +145,4 @@ public class ContractServiceTest {
         });
     }
 
-    @Test
-    @DisplayName("Should throw exception when trying to modify a not-active contract")
-    void shouldThrowExceptionWhenModifyingANonActiveContract() {
-        // Test throwing exception when trying to modify an ended contract
-        // Mock repository behavior
-        // Call service method and expect exception
-    }
-
-    @Test
-    @DisplayName("Should throw exception when trying to register an invalid party identification (CPF/CNPJ validation)")
-    void shouldThrowExceptionWhenRegisteringInvalidIdentification() {
-        // Test throwing exception when trying to register an invalid party identification
-        // Mock repository behavior
-        // Call service method and expect exception
-    }
 }

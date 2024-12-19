@@ -6,7 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -43,20 +42,8 @@ public class Event {
         this.type = type;
     }
 
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getContractId() {
