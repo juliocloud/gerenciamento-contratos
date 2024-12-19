@@ -46,6 +46,30 @@ public class Contract {
         this.status = status;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public List<Party> getParties() {
+        return parties;
+    }
+
+    public void setParties(List<Party> parties) {
+        this.parties = parties;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
     public Contract(
             LocalDate creationDate,
             String description,
@@ -58,14 +82,12 @@ public class Contract {
 
     @Id
     @Column(name = "contract_number", unique = true)
-    @NotNull(message = "Mandatory field")
     private String number;
 
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
     @Column(name = "description")
-    @NotNull(message = "Mandatory field")
     private String description;
 
     @Column(name = "status")
