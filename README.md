@@ -36,7 +36,7 @@ Esta documentação detalha o desenvolvimento de uma API de contratos
       "status": "ContractStatus"
     }
     ```
-- **Descrição:** Creates a new contract.
+- **Descrição:** Cria um novo contrato
 
 #### 2. **Arquivar um contrato**
 - **Metodo:** `PUT`
@@ -73,11 +73,11 @@ Esta documentação detalha o desenvolvimento de uma API de contratos
     ```
 - **Descrição:** Atualiza um contrato pelo seu número.
 
-#### 4. **Search Contracts by Status**
+#### 4. **Buscar contratos por status**
 - **Metodo:** `GET`
 - **Endpoint:** `/api/contracts/find/status/{status}`
 - **Variavel de rota:**
-    - `status`: ContractStatus (e.g., `ACTIVE`, `ARCHIVED`)
+    - `status`: ContractStatus (por exemplo, `ACTIVE`, `ARCHIVED`)
 - **Resposta:**
     - **Codigo de resposta:** `200 OK`
     - **Corpo:**
@@ -93,7 +93,7 @@ Esta documentação detalha o desenvolvimento de uma API de contratos
     ```
 - **Descrição:** Retorna uma lista de contratos de acordo com o status
 
-#### 5. **Search Contracts by Creation Date**
+#### 5. **Buscar contratos por data de criação**
 - **Metodo:** `GET`
 - **Endpoint:** `/api/contracts/find/creationDate/{date}`
 - **Variavel de rota:**
@@ -180,7 +180,7 @@ Esta documentação detalha o desenvolvimento de uma API de contratos
 
 ### URL base: `/api/events`
 
-#### 1. **Register an Event**
+#### 1. **Registra um novo evento**
 - **Metodo:** `POST`
 - **Endpoint:** `/api/events`
 - **Corpo da requisição:**
