@@ -10,7 +10,6 @@ Esta documentação detalha o desenvolvimento de uma API de contratos
 - [Analise de qualidade](#5-análise-de-qualidade)
 - [PostgreSQL](#6-postgresql)
 
--  
 ## 1. Detalhamento dos endpoints
 
 ## API de contratos
