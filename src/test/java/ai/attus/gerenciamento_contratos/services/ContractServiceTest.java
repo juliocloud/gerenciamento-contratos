@@ -5,7 +5,6 @@ import ai.attus.gerenciamento_contratos.exceptions.DuplicateFieldValueException;
 import ai.attus.gerenciamento_contratos.models.Contract;
 import ai.attus.gerenciamento_contratos.repository.ContractRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
