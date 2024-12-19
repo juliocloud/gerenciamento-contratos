@@ -9,6 +9,8 @@ import ai.attus.gerenciamento_contratos.enums.EventType;
 import ai.attus.gerenciamento_contratos.enums.PartyType;
 import ai.attus.gerenciamento_contratos.enums.IdentificationType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -45,6 +47,7 @@ class ContractControllerTest {
 
     @Test
     void testCreateContract() throws Exception {
+        // Arrange
         Contract contract = new Contract(
                 LocalDate.now(),
                 "Sample Description",
@@ -52,6 +55,9 @@ class ContractControllerTest {
         );
 
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         String json = objectMapper.writeValueAsString(contract);
 
         mockMvc.perform(post("/api/contracts")
@@ -62,6 +68,7 @@ class ContractControllerTest {
         verify(contractService).createContract(any(Contract.class));
     }
 
+
     @Test
     void testUpdateContract() throws Exception {
         Contract updatedContract = new Contract(
@@ -71,15 +78,21 @@ class ContractControllerTest {
         );
 
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         String json = objectMapper.writeValueAsString(updatedContract);
 
+        // Act
         mockMvc.perform(put("/api/contracts/sample-number")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
 
+        // Assert
         verify(contractService).updateContract(anyString(), any(Contract.class));
     }
+
 
     @Test
     void testArchiveContract() throws Exception {
