@@ -237,6 +237,7 @@ Esta sessão tem como objetivo descrever decisões de arquitetura tomadas que di
 2. A única entidade que possui valor de id autogerado é `Event`. Isso porque imaginei que a entidade `Party` vem de outra aplicação já com o seu ID definido (por exemplo, um cadastro prévio de clientes). Além disso, `Contract` também já vem com seu id pré-definido, por uma questão de organização processual de contratos. `Event`, por outro lado, tem o seu id auto gerado pela biblioteca `UUID`.  
 
 ## 4. Documentação
+Esta seção descreve os diagramas de classes e de usos utilizados no sistema. É possível acessar estes arquivos, tanto em png quanto em xml no caminho `src/main/resources/docs`. Os diagramas xml são passíveis de reprodução no site `app.diagrams.net`. Basta apenas entrar no site e importar o conteúdo xml.
 #### Diagrama de classes
 Este diagrama descreve todas as classes utilizadas no sistema. Dentre as classes POJO do sistema, também foram destacadas as classes Service e Controllers
 ![Diagrama de classes](src/main/resources/docs/png_docs/classes.png)
