@@ -4,7 +4,7 @@ Esta documentação detalha o desenvolvimento de uma API de contratos
 ## Conteúdo:
 
 - [Detalhamento de endpoints](#1-detalhamento-dos-endpoints)
-- [Avaliação comportamental](#2-avalicação-comportamental)
+- [Avaliação comportamental](#2-avaliação-comportamental)
 - [Implementações não especificadas](#3-implementações-não-especificadas)
 - [Documentação](#4-documentação)
 - [Analise de qualidade](#5-análise-de-qualidade)
@@ -208,7 +208,7 @@ Esta documentação detalha o desenvolvimento de uma API de contratos
 ---
 
 
-## 2. Avalicação comportamental
+## 2. Avaliação comportamental
 #### 1. Considere que você é o desenvolvedor responsável por uma nova funcionalidade para um sistema de gerenciamento de clientes. Durante a fase de desenvolvimento, você percebe que a funcionalidade planejada inicialmente não atende a todos os requisitos do cliente. Seu líder lhe solicita um posicionamento sobre a situação. O que você faria nesse cenário e qual seria sua resposta?
 - Primeiramente eu analisaria tudo o que possuo registrado sobre a necessidade do cliente: documentação, casos de uso e quaisquer detalhes registrados. Após isso eu reuniria todas as possíveis funcionalidades faltantes no sistema e enviaria uma lista de problemas, e as possíveis soluções que poderíamos ter para esses problemas. Caso fosse necessário, e solicitado pelo meu líder, entraríamos em reunião para conversar possíveis dúvidas que a minha proposta possa ter gerado.
 
