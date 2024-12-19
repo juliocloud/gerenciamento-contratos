@@ -44,28 +44,8 @@ public class Contract {
         this.status = status;
     }
 
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    public List<Party> getParties() {
-        return parties;
-    }
-
     public void setParties(List<Party> parties) {
         this.parties = parties;
-    }
-
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
     }
 
     public Contract(
@@ -117,15 +97,6 @@ public class Contract {
     @JsonIgnore
     private int version;
 
-    @Override
-    public String toString() {
-        return "Contract{" +
-                "number='" + number + '\'' +
-                ", creationDate=" + creationDate +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
-    }
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Party> parties;
 

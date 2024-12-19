@@ -42,20 +42,8 @@ public class Event {
         this.type = type;
     }
 
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getContractId() {
