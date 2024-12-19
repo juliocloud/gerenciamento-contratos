@@ -1,6 +1,6 @@
 package ai.attus.gerenciamento_contratos.services;
 
-import ai.attus.gerenciamento_contratos.controllers.common.FieldError;
+import ai.attus.gerenciamento_contratos.controllers.common.MakeFieldError;
 import ai.attus.gerenciamento_contratos.enums.ContractStatus;
 import ai.attus.gerenciamento_contratos.exceptions.DuplicateFieldValueException;
 import ai.attus.gerenciamento_contratos.models.Contract;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContractService {
@@ -24,8 +25,8 @@ public class ContractService {
     public Contract createContract(Contract contract) throws DuplicateFieldValueException {
         fillAutomaticFields(contract);
         if(contractRepository.existsById(contract.getNumber())) {
-            FieldError fieldError = new FieldError("number", "Duplicate contract number");
-            throw new DuplicateFieldValueException("Duplicate contract number", fieldError);
+            MakeFieldError fieldError = new MakeFieldError("number", "Duplicate contract number");
+            throw new DuplicateFieldValueException(fieldError);
         }
         return contractRepository.save(contract);
     }
@@ -72,4 +73,14 @@ public class ContractService {
     public void fillAutomaticFields(Contract contract){
         contract.setCreationDate(LocalDate.now());
     }
+
+    public boolean existsById(String contractId) {
+        return contractRepository.existsById(contractId);
+    }
+
+    public void seal(ContractStatus status, String contractNumber){
+        Optional<Contract> contract = contractRepository.findById(contractNumber);
+        contract.ifPresent(value -> value.setStatus(status));
+    }
+
 }

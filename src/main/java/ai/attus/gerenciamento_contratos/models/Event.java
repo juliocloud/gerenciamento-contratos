@@ -84,4 +84,15 @@ public class Event {
     @Column(name = "contract_id")
     private String contractId;
 
+    public String getPartyId() {
+        return partyId;
+    }
+
+    public void setPartyId(String partyId) {
+        this.partyId = partyId;
+    }
+
+    @Column(name = "party_Id")
+    private String partyId;
+
 }
