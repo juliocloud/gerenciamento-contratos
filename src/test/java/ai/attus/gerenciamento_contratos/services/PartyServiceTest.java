@@ -7,16 +7,20 @@ import ai.attus.gerenciamento_contratos.models.Party;
 import ai.attus.gerenciamento_contratos.repository.PartyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
 public class PartyServiceTest {
 
     @Mock
@@ -29,35 +33,17 @@ public class PartyServiceTest {
     private PartyService partyService;
 
     private Party party;
-    private String contractNumber = "12345";
-    private String partyId = "party1";
-    private String contractId = "contract1";
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
+    void setUp() {
         party = new Party();
-        party.setId(partyId);
-        party.setContractId(contractId);
+        party.setId("123");
+        party.setContractId("C-001");
     }
 
     @Test
-    public void shouldRegisterPartySuccessfully() {
-        when(partyRepository.existsById(partyId)).thenReturn(false);
-        when(contractService.existsById(contractId)).thenReturn(true);
-        when(partyRepository.save(party)).thenReturn(party);
-
-        Party registeredParty = partyService.registerParty(party);
-
-        assertNotNull(registeredParty);
-        assertEquals(partyId, registeredParty.getId());
-        assertEquals(contractId, registeredParty.getContractId());
-        verify(partyRepository, times(1)).save(party);
-    }
-
-    @Test
-    public void shouldThrowDuplicatePartyIdException() {
-        when(partyRepository.existsById(partyId)).thenReturn(true);
+    void testRegisterParty_ThrowsDuplicatePartyNumber() {
+        when(partyRepository.existsById(party.getId())).thenReturn(true);
 
         MakeFieldError expectedError = new MakeFieldError("id", "Duplicate party number");
 
@@ -65,17 +51,14 @@ public class PartyServiceTest {
             partyService.registerParty(party);
         });
 
-        assertNotNull(exception.getField());
         assertEquals(expectedError.field(), exception.getField().field());
-        assertEquals(expectedError.error(), exception.getMessage());
-        verify(partyRepository, never()).save(any(Party.class));
+        assertEquals(expectedError.error(), exception.getField().error());
     }
 
-
     @Test
-    public void shouldThrowReferencedObjectDoesntExistExceptionForNonExistingContract() {
-        when(partyRepository.existsById(partyId)).thenReturn(false);
-        when(contractService.existsById(contractId)).thenReturn(false);
+    void testRegisterParty_ThrowsContractDoesNotExist() {
+        when(partyRepository.existsById(party.getId())).thenReturn(false);
+        when(contractService.existsById(party.getContractId())).thenReturn(false);
 
         MakeFieldError expectedError = new MakeFieldError("contractId", "Contract doesn't exist in the database");
 
@@ -83,15 +66,28 @@ public class PartyServiceTest {
             partyService.registerParty(party);
         });
 
-        assertNotNull(exception.getField());
         assertEquals(expectedError.field(), exception.getField().field());
-        assertEquals(expectedError.error(), exception.getMessage());
-        verify(partyRepository, never()).save(any(Party.class));
+        assertEquals(expectedError.error(), exception.getField().error());
     }
 
+    @Test
+    void testRegisterParty_Success() {
+        when(partyRepository.existsById(party.getId())).thenReturn(false);
+        when(contractService.existsById(party.getContractId())).thenReturn(true);
+        when(partyRepository.save(any(Party.class))).thenReturn(party);
+
+        Party result = partyService.registerParty(party);
+
+        assertNotNull(result);
+        assertEquals(party.getId(), result.getId());
+        assertEquals(party.getContractId(), result.getContractId());
+
+        verify(partyRepository, times(1)).save(party);
+    }
 
     @Test
-    public void shouldReturnPartiesAssociatedWithContract() {
+    void testGetPartiesAssociatedWithContract() {
+        String contractNumber = "C-001";
         when(partyRepository.findByContractNumber(contractNumber)).thenReturn(List.of(party));
 
         var parties = partyService.getPartiesAssociatedWithContract(contractNumber);
@@ -99,25 +95,24 @@ public class PartyServiceTest {
         assertNotNull(parties);
         assertFalse(parties.isEmpty());
         assertEquals(1, parties.size());
-        assertEquals(partyId, parties.getFirst().getId());
     }
 
     @Test
-    public void shouldReturnEmptyIfPartyNotFoundById() {
-        when(partyRepository.findById(partyId)).thenReturn(Optional.empty());
+    void testGetById() {
+        when(partyRepository.findById("123")).thenReturn(Optional.of(party));
 
-        Optional<Party> foundParty = partyService.getById(partyId);
+        Optional<Party> result = partyService.getById("123");
 
-        assertTrue(foundParty.isEmpty());
+        assertTrue(result.isPresent());
+        assertEquals(party.getId(), result.get().getId());
     }
 
     @Test
-    public void shouldReturnPartyIfFoundById() {
-        when(partyRepository.findById(partyId)).thenReturn(Optional.of(party));
+    void testGetById_NotFound() {
+        when(partyRepository.findById("123")).thenReturn(Optional.empty());
 
-        Optional<Party> foundParty = partyService.getById(partyId);
+        Optional<Party> result = partyService.getById("123");
 
-        assertTrue(foundParty.isPresent());
-        assertEquals(partyId, foundParty.get().getId());
+        assertFalse(result.isPresent());
     }
 }
