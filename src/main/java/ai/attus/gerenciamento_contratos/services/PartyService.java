@@ -41,7 +41,6 @@ public class PartyService {
     }
 
     public List<Party> getPartiesAssociatedWithContract(String contractNumber){
-
         return partyRepository.findByContractNumber(contractNumber);
     }
 
