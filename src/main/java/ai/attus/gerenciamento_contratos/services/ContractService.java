@@ -60,8 +60,8 @@ public class ContractService {
     }
 
     @Transactional
-    public List<Contract> searchByCreationDateRange(LocalDate date) {
-        return contractRepository.findByCreationDateRange(date);
+    public List<Contract> searchByCreationDate(LocalDate date) {
+        return contractRepository.findByCreationDate(date);
     }
 
     @Transactional
@@ -81,6 +81,10 @@ public class ContractService {
     public void seal(ContractStatus status, String contractNumber){
         Optional<Contract> contract = contractRepository.findById(contractNumber);
         contract.ifPresent(value -> value.setStatus(status));
+    }
+
+    public Optional<Contract> findById(String id){
+        return contractRepository.findById(id);
     }
 
 }

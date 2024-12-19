@@ -74,7 +74,7 @@ public class EventService {
             case EventType.RENEWAL:
             case EventType.TERMINATION:
                 if (!ContractStatus.ACTIVE.equals(contractStatus) && !ContractStatus.SUSPENDED.equals(contractStatus)) {
-                    MakeFieldError fieldError = new MakeFieldError("status","Contract status must be ACTIVE or SUSPENDED for %s events." + registerType);
+                    MakeFieldError fieldError = new MakeFieldError("status","Contract status must be ACTIVE or SUSPENDED for event." + registerType);
                     throw new InvalidContractStatusException(fieldError);
                 }
                 break;

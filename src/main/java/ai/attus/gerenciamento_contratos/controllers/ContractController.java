@@ -49,7 +49,7 @@ public class ContractController {
 
     @GetMapping("/find/creationDate/{date}")
     public ResponseEntity<List<Contract>> searchByCreationDateRange(@PathVariable LocalDate date) {
-        return ResponseEntity.ok(contractService.searchByCreationDateRange(date));
+        return ResponseEntity.ok(contractService.searchByCreationDate(date));
     }
 
 
