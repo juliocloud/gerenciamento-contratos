@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -37,7 +37,7 @@ public class Contract {
     @JsonCreator
     public Contract(
             @JsonProperty("number") String number,
-            @JsonProperty("creationDate") LocalDateTime creationDate,
+            @JsonProperty("creationDate") LocalDate creationDate,
             @JsonProperty("description") String description,
             @JsonProperty("status") ContractStatus status) {
         this.number = number;
@@ -46,8 +46,32 @@ public class Contract {
         this.status = status;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public List<Party> getParties() {
+        return parties;
+    }
+
+    public void setParties(List<Party> parties) {
+        this.parties = parties;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
     public Contract(
-            LocalDateTime creationDate,
+            LocalDate creationDate,
             String description,
             ContractStatus status) {
 
@@ -58,15 +82,12 @@ public class Contract {
 
     @Id
     @Column(name = "contract_number", unique = true)
-    @NotNull(message = "Mandatory field")
     private String number;
 
     @Column(name = "creation_date")
-    @Past(message = "Cannot be a future date")
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
 
     @Column(name = "description")
-    @NotNull(message = "Mandatory field")
     private String description;
 
     @Column(name = "status")
@@ -77,7 +98,7 @@ public class Contract {
         return number;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -90,7 +111,7 @@ public class Contract {
         return description;
     }
 
-    public LocalDateTime getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 

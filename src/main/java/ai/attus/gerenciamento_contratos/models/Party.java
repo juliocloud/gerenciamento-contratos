@@ -13,7 +13,22 @@ import lombok.Data;
 @Entity
 @Table(name = "parties")
 public class Party {
-    public Party(String identification, String fullName, IdentificationType identificationType, PartyType type, String email, String phone) {
+    @Override
+    public String toString() {
+        return "Party{" +
+                "id='" + id + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", identification='" + identification + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", contractId='" + contractId + '\'' +
+                ", identificationType=" + identificationType +
+                ", type=" + type +
+                '}';
+    }
+
+    public Party(String id, String identification, String fullName, IdentificationType identificationType, PartyType type, String email, String phone) {
+        this.id = id;
         this.identification = identification;
         this.fullName = fullName;
         this.identificationType = identificationType;
@@ -27,7 +42,7 @@ public class Party {
 
     @Id
     @Column(name = "id", unique = true)
-    @NotNull(message = "Mandatory field")
+    @NotNull(message = "Party id cannot be null")
     private String id;
 
     @Column(name = "full_name")
@@ -43,6 +58,7 @@ public class Party {
     private String phone;
 
     @Column(name = "contract_id")
+    @NotNull(message = "Contract id cannot be null")
     private String contractId;
 
     private IdentificationType identificationType;
@@ -50,4 +66,67 @@ public class Party {
     private PartyType type;
 
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(String identification) {
+        this.identification = identification;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
+    }
+
+    public IdentificationType getIdentificationType() {
+        return identificationType;
+    }
+
+    public void setIdentificationType(IdentificationType identificationType) {
+        this.identificationType = identificationType;
+    }
+
+    public PartyType getType() {
+        return type;
+    }
+
+    public void setType(PartyType type) {
+        this.type = type;
+    }
 }

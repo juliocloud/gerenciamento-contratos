@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +41,7 @@ public class ContractServiceTest {
         testContract = new Contract();
         testContract.setNumber("CONT-001");
         testContract.setDescription("Contract de Teste");
-        testContract.setCreationDate(LocalDateTime.now());
+        testContract.setCreationDate(LocalDate.now());
         testContract.setStatus(ContractStatus.ACTIVE);
     }
 
@@ -88,7 +88,7 @@ public class ContractServiceTest {
         Contract edited = new Contract();
         edited.setNumber("CONT-001");
         edited.setDescription("This description is now edited");
-        edited.setCreationDate(LocalDateTime.now());
+        edited.setCreationDate(LocalDate.now());
         edited.setStatus(ContractStatus.ACTIVE);
 
         contractService.updateContract("CONT-001", edited);

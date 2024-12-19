@@ -1,5 +1,9 @@
 # Gerenciamento de contratos
 
+## Implementações não especificadas
+Esta sessão tem como objetivo descrever decisões de arquitetura tomadas que diferem da proposta realizada. São pequenas implementações que, apesar de não especificadas, ajudaram no processo de desenvolvimento e nas implementações de regras de negócio
+
+1. Na classe `Event`, localizada em `src/main/java/ai/attus/gerenciamento_contratos/models/Event.java`, foi adicionada uma propriedade `partyId`. Isso foi realizado para controle de quais partes assinaram um documento, e assim realizar o controle de assinaturas duplicadas
 ## Documentação
 #### Diagrama de classes
 Este diagrama descreve todas as classes utilizadas no sistema. Dentre as classes POJO do sistema, também foram destacadas as classes Service e Controllers
@@ -36,27 +40,28 @@ Para a criação de tabelas é necessário acessar a instância docker com o com
 ```
 CREATE TABLE contracts (
         contract_number VARCHAR(50) UNIQUE NOT NULL PRIMARY KEY,
-        creation_date TIMESTAMP NOT NULL,
-        description TEXT NOT NULL,
+        creation_date TIMESTAMP,
+        description TEXT,
         status VARCHAR(20)
         );
 
         CREATE TABLE parties (
-        id SERIAL PRIMARY KEY,
+        id VARCHAR(200) PRIMARY KEY,
         contract_id VARCHAR(50) REFERENCES contracts(contract_number),
-        full_name VARCHAR(100) NOT NULL,
-        document VARCHAR(20) NOT NULL,
-        type VARCHAR(20) NOT NULL,
+        full_name VARCHAR(100),
+        document VARCHAR(20),
+        type VARCHAR(20),
         email VARCHAR(100),
         phone VARCHAR(20)
         );
 
         CREATE TABLE events (
-        id SERIAL PRIMARY KEY,
+        id VARCHAR(200) PRIMARY KEY,
         contract_id VARCHAR(50) REFERENCES contracts(contract_number),
-        event_type VARCHAR(20) NOT NULL,
-        event_date TIMESTAMP NOT NULL,
-        description TEXT
+        event_type VARCHAR(20),
+        event_date TIMESTAMP,
+        description TEXT,
+        party_id VARCHAR(200)
         );
 
 ```
