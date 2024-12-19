@@ -42,7 +42,7 @@ CREATE TABLE contracts (
         );
 
         CREATE TABLE parties (
-        id SERIAL PRIMARY KEY,
+        id VARCHAR(200) PRIMARY KEY,
         contract_id VARCHAR(50) REFERENCES contracts(contract_number),
         full_name VARCHAR(100) NOT NULL,
         document VARCHAR(20) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE contracts (
         );
 
         CREATE TABLE events (
-        id SERIAL PRIMARY KEY,
+        id VARCHAR(200) PRIMARY KEY,
         contract_id VARCHAR(50) REFERENCES contracts(contract_number),
         event_type VARCHAR(20) NOT NULL,
         event_date TIMESTAMP NOT NULL,
