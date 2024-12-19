@@ -36,6 +36,9 @@ Este diagrama descreve os estados possíveis para os eventos. Cada evento está 
 ![Diagrama de estado](src/main/resources/docs/png_docs/state_diagram.png)
 
 ## Análise de qualidade
+Esta é a análise de qualidade no estágio atual do código. Foram levados em consideração diversos pontos em que extensivamente reviesei para sanar as issues e obter o mario valor para code coverage
+
+![Code_coverage](src/main/resources/docs/png_docs/code_coverage.png)
 Para garantir a qualidade do código, foi utilizado o SonarQube. Para utilizar o Sonar, primeiro é necessário baixar e iniciar a imagem Docker com o seguinte comando:
 ```
 $ docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest
