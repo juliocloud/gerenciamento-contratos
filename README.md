@@ -1,6 +1,215 @@
 # Gerenciamento de contratos
+Esta documentação detalha o desenvolvimento de uma API de contratos
 
-## Avalicação comportamental
+## Conteúdo:
+
+- [Detalhamento de endpoints](#1-detalhamento-dos-endpoints)
+- [Avaliação comportamental](#2-avalicação-comportamental)
+- [Implementações não especificadas](#3-implementações-não-especificadas)
+- [Documentação](#4-documentação)
+- [Analise de qualidade](#5-análise-de-qualidade)
+- [PostgreSQL](#6-postgresql)
+
+-  
+## 1. Detalhamento dos endpoints
+
+## API de contratos
+### URL base: `/api/contracts`
+
+#### 1. **Criar um contrato**
+- **Metodo:** `POST`
+- **Endpoint:** `/api/contracts`
+- **Corpo da requisição:**
+    ```json
+    {
+        "number": "string",
+        "status": "ContractStatus"
+    }
+    ```
+- **Resposta:**
+    - **Codigo de resposta:** `200 OK`
+    - **Corpo:**
+    ```json
+    {
+      "number": "string",
+      "creationDate": "LocalDate",
+      "description": "string",
+      "status": "ContractStatus"
+    }
+    ```
+- **Descrição:** Creates a new contract.
+
+#### 2. **Arquivar um contrato**
+- **Metodo:** `PUT`
+- **Endpoint:** `/api/contracts/archive`
+- **Corpo da requisição:**
+    ```json
+    {
+        "contractNumber": "string"
+    }
+    ```
+- **Resposta:**
+    - **Codigo de resposta:** `204 No Content`
+- **Descrição:** Arquiva um contrato existente.
+
+#### 3. **Atualizar contrato**
+- **Metodo:** `PUT`
+- **Endpoint:** `/api/contracts/{contractNumber}`
+- **Corpo da requisição:**
+    ```json
+    {
+      "description": "string"
+    }
+    ```
+- **Resposta:**
+    - **Codigo de resposta:** `200 OK`
+    - **Corpo:**
+    ```json
+    {
+      "number": "string",
+      "creationDate": "LocalDate",
+      "description": "string",
+      "status": "ContractStatus"
+    }
+    ```
+- **Descrição:** Atualiza um contrato pelo seu número.
+
+#### 4. **Search Contracts by Status**
+- **Metodo:** `GET`
+- **Endpoint:** `/api/contracts/find/status/{status}`
+- **Variavel de rota:**
+    - `status`: ContractStatus (e.g., `ACTIVE`, `ARCHIVED`)
+- **Resposta:**
+    - **Codigo de resposta:** `200 OK`
+    - **Corpo:**
+    ```json
+    [
+        {
+          "number": "string",
+          "creationDate": "string",
+          "description": "string",
+          "status": "ContractStatus"
+        }
+    ]
+    ```
+- **Descrição:** Retorna uma lista de contratos de acordo com o status
+
+#### 5. **Search Contracts by Creation Date**
+- **Metodo:** `GET`
+- **Endpoint:** `/api/contracts/find/creationDate/{date}`
+- **Variavel de rota:**
+    - `date`: LocalDate (format: YYYY-MM-DD)
+- **Resposta:**
+    - **Codigo de resposta:** `200 OK`
+    - **Corpo:**
+    ```json
+    [
+        {
+          "number": "string",
+          "creationDate": "string",
+          "description": "string",
+          "status": "ContractStatus"
+        }
+    ]
+    ```
+- **Descrição:** Retorna uma lista de contratos criados em uma data especifica
+
+#### 6. **Busca um contrato pelo ID da parte**
+- **Metodo:** `GET`
+- **Endpoint:** `/api/contracts/find/partyId/{partyId}`
+- **Variavel de rota:**
+    - `partyId`: Party ID (string)
+- **Resposta:**
+    - **Codigo de resposta:** `200 OK`
+    - **Corpo:**
+    ```json
+    [
+        {
+          "number": "string",
+          "creationDate": "string",
+          "description": "string",
+          "status": "ContractStatus"
+        }
+    ]
+    ```
+- **Descrição:** Retorna uma lista de contratos baseados no ID da parte
+
+---
+
+
+## API de partes
+
+### URL base: `/api/parties`
+
+#### 1. **Registra uma parte**
+- **Metodo:** `POST`
+- **Endpoint:** `/api/parties`
+- **Corpo da requisição:**
+    ```json
+    {
+      "id": "string",
+      "fullName": "string",
+      "identification": "string",
+      "email": "string",
+      "phone": "string",
+      "contractId": "string",
+      "identificationType": "IdentificationType",
+      "type": "string"
+    }
+    ```
+- **Resposta:**
+    - **Codigo de resposta:** `200 OK`
+    - **Corpo:**
+    ```json
+    {
+      "id": "string",
+      "fullName": "string",
+      "identification": "string",
+      "email": "string",
+      "phone": "string",
+      "contractId": "string",
+      "identificationType": "IdentificationType",
+      "type": "string"
+    }
+    ```
+- **Descrição:** Registra uma nova parte
+
+
+---
+
+## API de eventos
+
+### URL base: `/api/events`
+
+#### 1. **Register an Event**
+- **Metodo:** `POST`
+- **Endpoint:** `/api/events`
+- **Corpo da requisição:**
+    ```json
+    {
+      "contractId":"string",
+      "type":"EventType",
+      "partyId":"string"
+    }
+    ```
+- **Resposta:**
+    - **Codigo de resposta:** `200 OK`
+    - **Corpo:**
+    ```json
+    {
+      "type": "EventType",
+      "registrationDate": "LocalDate",
+      "description": "string",
+      "contractId": "string",
+      "partyId": "string"
+    }
+    ```
+- **Descrição:** Registra um novo evento
+
+---
+
+
+## 2. Avalicação comportamental
 #### 1. Considere que você é o desenvolvedor responsável por uma nova funcionalidade para um sistema de gerenciamento de clientes. Durante a fase de desenvolvimento, você percebe que a funcionalidade planejada inicialmente não atende a todos os requisitos do cliente. Seu líder lhe solicita um posicionamento sobre a situação. O que você faria nesse cenário e qual seria sua resposta?
 - Primeiramente eu analisaria tudo o que possuo registrado sobre a necessidade do cliente: documentação, casos de uso e quaisquer detalhes registrados. Após isso eu reuniria todas as possíveis funcionalidades faltantes no sistema e enviaria uma lista de problemas, e as possíveis soluções que poderíamos ter para esses problemas. Caso fosse necessário, e solicitado pelo meu líder, entraríamos em reunião para conversar possíveis dúvidas que a minha proposta possa ter gerado.
 
@@ -20,11 +229,15 @@
 - Primeiramente, comunicar à liderança e ao time o impeditivo, e conversar sobre possibilidades. Deixar claro que a tarefa tomou uma complexidade maior do que a esperada, e buscar possivelmente apoio a outros membros do time. Além disso, analisaria a possibilidade de uma entrega com todas as funcionalidades para o cliente, mas com implementações mais simples. 
 
 - Fora isso, caso não fosse contra a cultura da empresa e a rotina do time, me disponibilizaria para fazer um trabalho extra e tentar garantir a entrega no prazo. 
-## Implementações não especificadas
+
+## 3. Implementações não especificadas
 Esta sessão tem como objetivo descrever decisões de arquitetura tomadas que diferem da proposta realizada. São pequenas implementações que, apesar de não especificadas, ajudaram no processo de desenvolvimento e nas implementações de regras de negócio
 
 1. Na classe `Event`, localizada em `src/main/java/ai/attus/gerenciamento_contratos/models/Event.java`, foi adicionada uma propriedade `partyId`. Isso foi realizado para controle de quais partes assinaram um documento, e assim realizar o controle de assinaturas duplicadas
-## Documentação
+
+2. A única entidade que possui valor de id autogerado é `Event`. Isso porque imaginei que a entidade `Party` vem de outra aplicação já com o seu ID definido (por exemplo, um cadastro prévio de clientes). Além disso, `Contract` também já vem com seu id pré-definido, por uma questão de organização processual de contratos. `Event`, por outro lado, tem o seu id auto gerado pela biblioteca `UUID`.  
+
+## 4. Documentação
 #### Diagrama de classes
 Este diagrama descreve todas as classes utilizadas no sistema. Dentre as classes POJO do sistema, também foram destacadas as classes Service e Controllers
 ![Diagrama de classes](src/main/resources/docs/png_docs/classes.png)
@@ -35,7 +248,7 @@ Este diagrama descreve os enums utilizados no sistema, para descrever valores co
 Este diagrama descreve os estados possíveis para os eventos. Cada evento está mapeado e descrito como Assinatura, Rescisão e Renovação
 ![Diagrama de estado](src/main/resources/docs/png_docs/state_diagram.png)
 
-## Análise de qualidade
+## 5. Análise de qualidade
 Esta é a análise de qualidade no estágio atual do código. Foram levados em consideração diversos pontos em que extensivamente reviesei para sanar as issues e obter o mario valor para code coverage
 
 ![Code_coverage](src/main/resources/docs/png_docs/code_coverage.png)
@@ -53,7 +266,7 @@ mvn clean verify sonar:sonar
   -Dsonar.token=seu_token_gerado_no_sonar
 ```
 
-## PostgreSQL
+## 6. PostgreSQL
 ### Configuração
 Foi utilizada a imagem Docker do postgres para utilização de banco de dados. Para subir a imagem docker do Postgres, é necessário utilizar o seguinte comando:
 ```
@@ -88,4 +301,3 @@ CREATE TABLE contracts (
         );
 
 ```
-
