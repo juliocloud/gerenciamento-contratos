@@ -12,7 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class EventService {
 
     private Event fillEvent(Event event){
         String id = UUID.randomUUID().toString();
-        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDate currentDate = LocalDate.now();
 
         event.setId(id);
         event.setRegistrationDate(currentDate);
