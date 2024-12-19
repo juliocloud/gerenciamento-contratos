@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,19 @@ public class ContractController {
         return ResponseEntity.ok(updated);
     }
 
-    @GetMapping("/{status}")
+    @GetMapping("/find/status/{status}")
     public ResponseEntity<List<Contract>> searchByStatus(@PathVariable ContractStatus status) {
         return ResponseEntity.ok(contractService.searchByStatus(status));
+    }
+
+    @GetMapping("/find/creationDate/{date}")
+    public ResponseEntity<List<Contract>> searchByCreationDateRange(@PathVariable LocalDate date) {
+        return ResponseEntity.ok(contractService.searchByCreationDateRange(date));
+    }
+
+
+    @GetMapping("/find/partyId/{partyId}")
+    public ResponseEntity<List<Contract>> searchByIdentification(@PathVariable String partyId) {
+        return ResponseEntity.ok(contractService.searchByIdentification(partyId));
     }
 }
