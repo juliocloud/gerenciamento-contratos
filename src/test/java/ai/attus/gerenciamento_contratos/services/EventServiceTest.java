@@ -1,6 +1,5 @@
 package ai.attus.gerenciamento_contratos.services;
 
-import ai.attus.gerenciamento_contratos.controllers.common.MakeFieldError;
 import ai.attus.gerenciamento_contratos.enums.ContractStatus;
 import ai.attus.gerenciamento_contratos.enums.EventType;
 import ai.attus.gerenciamento_contratos.exceptions.InvalidContractStatusException;
@@ -14,12 +13,16 @@ import ai.attus.gerenciamento_contratos.repository.EventRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -72,7 +75,6 @@ class EventServiceTest {
     void shouldRegisterEventSuccessfully() {
         testContract.setStatus(null);
 
-        Event testEvent = new Event();
         testEvent.setContractId(testContract.getNumber());
         testEvent.setType(EventType.SIGNATURE);
         testEvent.setPartyId(testParty.getId());
@@ -97,7 +99,6 @@ class EventServiceTest {
     void shouldThrowInvalidContractStatusExceptionForInvalidStatus() {
         testContract.setStatus(null);
 
-        Event testEvent = new Event();
         testEvent.setContractId(testContract.getNumber());
         testEvent.setType(EventType.RENEWAL);
         testEvent.setPartyId(testParty.getId());
@@ -113,15 +114,23 @@ class EventServiceTest {
         });
     }
 
-
     @Test
     @DisplayName("Should throw InvalidContractStatusException for sign events")
     void shouldThrowInvalidContractStatusExceptionForSignEvents() {
-        testContract.setStatus(ContractStatus.SUSPENDED);
+        shouldThrowInvalidContractStatusException(ContractStatus.SUSPENDED, EventType.SIGNATURE);
+    }
 
-        Event testEvent = new Event();
+    @Test
+    @DisplayName("Should throw InvalidContractStatusException for invalid status")
+    void shouldThrowInvalidContractStatusExceptionForTermination() {
+        shouldThrowInvalidContractStatusException(null, EventType.TERMINATION); // Here, setting status to null
+    }
+
+    private void shouldThrowInvalidContractStatusException(ContractStatus status, EventType eventType) {
+        testContract.setStatus(status);
+
         testEvent.setContractId(testContract.getNumber());
-        testEvent.setType(EventType.SIGNATURE);
+        testEvent.setType(eventType);
         testEvent.setPartyId(testParty.getId());
 
         when(contractRepository.findById(testContract.getNumber())).thenReturn(Optional.of(testContract));
@@ -130,34 +139,11 @@ class EventServiceTest {
         when(partyService.getById(testParty.getId())).thenReturn(Optional.of(testParty));
         when(partyService.getPartiesAssociatedWithContract(testContract.getNumber())).thenReturn(Collections.singletonList(testParty));
 
+        // Assert that InvalidContractStatusException is thrown
         assertThrows(InvalidContractStatusException.class, () -> {
             eventService.registerEvent(testEvent);
         });
     }
-
-
-
-    @Test
-    @DisplayName("Should throw InvalidContractStatusException for invalid status")
-    void shouldThrowInvalidContractStatusExceptionForTermination() {
-        testContract.setStatus(null);
-
-        Event testEvent = new Event();
-        testEvent.setContractId(testContract.getNumber());
-        testEvent.setType(EventType.TERMINATION);
-        testEvent.setPartyId(testParty.getId());
-
-        when(contractRepository.findById(testContract.getNumber())).thenReturn(Optional.of(testContract));
-
-        when(partyService.getById(testParty.getId())).thenReturn(Optional.of(testParty));
-
-        when(partyService.getPartiesAssociatedWithContract(testContract.getNumber())).thenReturn(List.of(testParty));
-
-        assertThrows(InvalidContractStatusException.class, () -> {
-            eventService.registerEvent(testEvent);
-        });
-    }
-
 
     @Test
     @DisplayName("Should throw InvalidPartySignatureException when invalid party signature is used")
@@ -179,30 +165,31 @@ class EventServiceTest {
     @Test
     @DisplayName("Should handle post event registration for activation events")
     void shouldHandlePostEventRegisteredForActivationEvents() {
-        List<Event> modifiableEvents = new ArrayList<>();
-        modifiableEvents.add(testEvent);
-
-        when(eventRepository.findByContractId(testEvent.getContractId())).thenReturn(modifiableEvents);
-        when(partyService.getPartiesAssociatedWithContract(testEvent.getContractId())).thenReturn(Collections.singletonList(testParty));
-
-        eventService.handlePostEventRegistered(testEvent);
-
-        verify(contractService).seal(ContractStatus.ACTIVE, testEvent.getContractId());
+        shouldHandlePostEventRegistered(EventType.SIGNATURE, ContractStatus.ACTIVE);
     }
 
     @Test
     @DisplayName("Should handle post event registration for termination events")
     void shouldHandlePostEventRegisteredForTerminationEvents() {
+        shouldHandlePostEventRegistered(EventType.TERMINATION, ContractStatus.FINISHED);
+    }
+
+    private void shouldHandlePostEventRegistered(EventType eventType, ContractStatus expectedStatus) {
+        // Set up the event with the appropriate type
+        testEvent.setType(eventType);
+
         List<Event> modifiableEvents = new ArrayList<>();
         modifiableEvents.add(testEvent);
 
+        // Mock interactions
         when(eventRepository.findByContractId(testEvent.getContractId())).thenReturn(modifiableEvents);
         when(partyService.getPartiesAssociatedWithContract(testEvent.getContractId())).thenReturn(Collections.singletonList(testParty));
 
+        // Call the method to handle post event registration
         eventService.handlePostEventRegistered(testEvent);
 
-        verify(contractService).seal(ContractStatus.ACTIVE, testEvent.getContractId());
+        // Verify the contract sealing
+        verify(contractService).seal(expectedStatus, testEvent.getContractId());
     }
-
 
 }

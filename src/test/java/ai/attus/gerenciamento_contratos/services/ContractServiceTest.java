@@ -3,7 +3,6 @@ package ai.attus.gerenciamento_contratos.services;
 import ai.attus.gerenciamento_contratos.enums.ContractStatus;
 import ai.attus.gerenciamento_contratos.exceptions.DuplicateFieldValueException;
 import ai.attus.gerenciamento_contratos.models.Contract;
-import ai.attus.gerenciamento_contratos.models.Party;
 import ai.attus.gerenciamento_contratos.repository.ContractRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,8 +33,6 @@ class ContractServiceTest {
     private ContractRepository contractRepository;
 
     private Contract testContract;
-
-    private Party testParty;
 
     @BeforeEach
     void setUp() {

@@ -27,7 +27,6 @@ public class PartyService {
 
     @Transactional
     public Party registerParty(Party party) {
-        System.out.println(">>>>>>" + party.getContractId());
         if(partyRepository.existsById(party.getId())) {
             MakeFieldError fieldError = new MakeFieldError("id", "Duplicate party number");
             throw new DuplicateFieldValueException(fieldError);

@@ -2,11 +2,13 @@ package ai.attus.gerenciamento_contratos.exceptions;
 
 import ai.attus.gerenciamento_contratos.controllers.common.MakeFieldError;
 
-public abstract class FieldException  extends RuntimeException{
+import java.io.Serializable;
 
-    MakeFieldError field;
+public abstract class FieldException  extends RuntimeException implements Serializable {
 
-    public FieldException(MakeFieldError field) {
+    protected final MakeFieldError field;
+
+    protected FieldException(MakeFieldError field) {
         super(field.error());
         this.field = field;
     }
