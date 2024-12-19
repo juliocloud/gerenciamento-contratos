@@ -2,6 +2,7 @@ package ai.attus.gerenciamento_contratos.models;
 
 import ai.attus.gerenciamento_contratos.enums.ContractStatus;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Past;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -80,11 +82,21 @@ public class Contract {
     }
 
 
+    public ContractStatus getStatus() {
+        return status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
 
     @Version
+    @JsonIgnore
     private int version;
-
-
 
     @Override
     public String toString() {
@@ -95,9 +107,9 @@ public class Contract {
                 ", status=" + status +
                 '}';
     }
-//@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<Party> parties;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Party> parties;
 
-    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    //private List<Event> events;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> events;
 }
