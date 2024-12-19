@@ -1,13 +1,6 @@
 package ai.attus.gerenciamento_contratos.controllers.common;
 
-public record MakeFieldError(String field, String error) {
-    @Override
-    public String field() {
-        return field;
-    }
+import java.io.Serializable;
 
-    @Override
-    public String error() {
-        return error;
-    }
+public record MakeFieldError(String field, String error) implements Serializable {
 }

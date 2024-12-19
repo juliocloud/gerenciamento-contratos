@@ -1,13 +1,11 @@
 package ai.attus.gerenciamento_contratos.controllers;
 
 import ai.attus.gerenciamento_contratos.enums.ContractStatus;
-import ai.attus.gerenciamento_contratos.models.Contract;
-import ai.attus.gerenciamento_contratos.services.ContractService;
-import ai.attus.gerenciamento_contratos.models.Event;
-import ai.attus.gerenciamento_contratos.models.Party;
-import ai.attus.gerenciamento_contratos.enums.EventType;
-import ai.attus.gerenciamento_contratos.enums.PartyType;
 import ai.attus.gerenciamento_contratos.enums.IdentificationType;
+import ai.attus.gerenciamento_contratos.enums.PartyType;
+import ai.attus.gerenciamento_contratos.models.Contract;
+import ai.attus.gerenciamento_contratos.models.Party;
+import ai.attus.gerenciamento_contratos.services.ContractService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -27,7 +25,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ContractControllerTest {
 
