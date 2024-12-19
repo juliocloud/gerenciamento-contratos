@@ -1,16 +1,9 @@
 package ai.attus.gerenciamento_contratos.exceptions;
 
-import ai.attus.gerenciamento_contratos.controllers.common.FieldError;
+import ai.attus.gerenciamento_contratos.controllers.common.MakeFieldError;
 
-public class DuplicateFieldValueException extends RuntimeException {
-    FieldError field;
-
-    public DuplicateFieldValueException(String message, FieldError field) {
-        super(message);
-        this.field = field;
-    }
-
-    public FieldError getField() {
-        return field;
+public class DuplicateFieldValueException extends FieldException {
+    public DuplicateFieldValueException(MakeFieldError field) {
+        super(field);
     }
 }
