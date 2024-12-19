@@ -53,7 +53,7 @@ public class ContractController {
     }
 
 
-    @GetMapping("/find/partyId/{id}")
+    @GetMapping("/find/partyId/{partyId}")
     public ResponseEntity<List<Contract>> searchByIdentification(@PathVariable String partyId) {
         return ResponseEntity.ok(contractService.searchByIdentification(partyId));
     }
