@@ -8,7 +8,7 @@ import ai.attus.gerenciamento_contratos.repository.ContractRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -58,7 +58,18 @@ public class ContractService {
         return contractRepository.findByStatus(status);
     }
 
+    @Transactional
+    public List<Contract> searchByCreationDateRange(LocalDate date) {
+        return contractRepository.findByCreationDateRange(date);
+    }
+
+    @Transactional
+    public List<Contract> searchByIdentification(String identification) {
+        return contractRepository.findByIdentification(identification);
+    }
+
+
     public void fillAutomaticFields(Contract contract){
-        contract.setCreationDate(LocalDateTime.now());
+        contract.setCreationDate(LocalDate.now());
     }
 }
